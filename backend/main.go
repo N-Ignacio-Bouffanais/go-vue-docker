@@ -15,14 +15,14 @@ func main() {
 		return c.Status(200).JSON(fiber.Map{"msg": "Hola mundo"})
 	})
 
-	log.Fatal(app.Listen(":8080"))
+	log.Fatal(app.Listen(":8083"))
 
 	fs := http.FileServer(http.Dir("../frontend/dist"))
 	http.Handle("/", fs)
 
-	log.Println("Server started on :8080")
+	log.Println("Server started on :8083")
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8083", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
