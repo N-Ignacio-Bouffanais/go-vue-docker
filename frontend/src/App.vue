@@ -12,6 +12,9 @@
 
   <main>
     <h1>Hola</h1>
+    <div>
+      Aqui estarian los graficos 
+    </div>
   </main>
 </template>
 

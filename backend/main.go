@@ -1,30 +1,21 @@
 package main
 
 import (
+	"go-vue-docker/api"
+	"go-vue-docker/chatbot"
+	"go-vue-docker/config"
 	"log"
 	"net/http"
-
-	"go-vue-docker/config"
-
-	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
+	cfg := config.LoadConfig()
 
-	config.LoadEnv()
-	token := config.GetToken()
+	go api.ServerGo()
+	// Start the chat bot in a separate Goroutine
+	go chatbot.StartBot(cfg)
 
-	app := fiber.New()
-
-	app.Get("/api", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{"msg": "Hola mundo"})
-	})
-	app.Get("/test", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{"Telegram Bot Token: %s": token})
-	})
-
-	log.Fatal(app.Listen(":8083"))
-
+	// Serve static files
 	fs := http.FileServer(http.Dir("../frontend/dist"))
 	http.Handle("/", fs)
 
@@ -34,5 +25,4 @@ func main() {
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
-
 }
