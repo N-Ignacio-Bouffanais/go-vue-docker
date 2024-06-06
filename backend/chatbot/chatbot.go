@@ -184,6 +184,7 @@ func Test(ctx context.Context, url, user, password string) ([]byte, error) {
 		emulation.SetDeviceMetricsOverride(1920, 1080, 2, false),
 		chromedp.Navigate(url),
 		chromedp.WaitReady("body"),
+		chromedp.Sleep(3),
 		chromedp.FullScreenshot(&buf, 100),
 	}
 
