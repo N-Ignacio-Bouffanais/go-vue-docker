@@ -32,7 +32,7 @@ func ServerGo() {
 		return c.Status(200).JSON(fiber.Map{"msg": "Hola mundo"})
 	})
 
-	app.Get("/data", func(c *fiber.Ctx) error {
+	app.Get("/api/data", func(c *fiber.Ctx) error {
 		// Connect to the remote server via SSH and retrieve data
 		data, err := fetchDataViaSSH()
 		if err != nil {

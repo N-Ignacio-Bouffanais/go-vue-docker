@@ -34,6 +34,7 @@ watch(query.data, (newData) => {
     store.setChartData(newData)
     updateChart()
   }
+  console.log(query.data)
 })
 
 const updateChart = () => {
@@ -47,7 +48,7 @@ const updateChart = () => {
       data: {
         labels: store.chartData.map(d => d.timestamp),
         datasets: [{
-          label: 'Tiempo de Envío de Datos',
+          label: 'Tiempo de los undock awaited',
           data: store.chartData.map(d => d.value),
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',

@@ -134,6 +134,7 @@ func handleTest(bot *tgbotapi.BotAPI, message *tgbotapi.Message, cfg config.Conf
 			return
 		}
 		PhotosResponse(screenshot, message, bot)
+		bot.Send(tgbotapi.NewMessage(message.Chat.ID, cfg.User))
 	} else {
 		bot.Send(tgbotapi.NewMessage(message.Chat.ID, "Comando no reconocido. Por favor, intenta nuevamente."))
 	}
@@ -165,7 +166,7 @@ func MLE(ctx context.Context, url, user, password string) ([]byte, error) {
 		chromedp.Navigate("http://10.115.43.118:3008/il/grafana/?orgId=1"),
 		chromedp.Navigate("http://10.115.43.118:3008/il/grafana/d/sDmADcSIk/mle-flr?orgId=1&refresh=30s"),
 		chromedp.WaitVisible("body", chromedp.BySearch),
-		chromedp.Sleep(15 * time.Second),
+		chromedp.Sleep(6 * time.Second),
 		chromedp.FullScreenshot(&buf, 90),
 	}
 
