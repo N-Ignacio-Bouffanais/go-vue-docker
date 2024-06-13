@@ -1,6 +1,7 @@
 package api
 
 import (
+	"go-vue-docker/config"
 	"log"
 	"net/http"
 	"strings"
@@ -25,16 +26,16 @@ func NewClient(baseURL string) *Client {
 	return &Client{baseURL: baseURL}
 }
 
-func ServerGo() {
+func ServerGo(cfg config.Config) {
 	app := fiber.New()
 
 	app.Get("/api", func(c *fiber.Ctx) error {
-		return c.Status(200).JSON(fiber.Map{"msg": "Hola mundo"})
+		return c.Status(200).JSON(fiber.Map{"msg": cfg.SSH_PORT})
 	})
 
 	app.Get("/api/data", func(c *fiber.Ctx) error {
 		// Connect to the remote server via SSH and retrieve data
-		data, err := fetchDataViaSSH()
+		data, err := fetchDataViaSSH(cfg)
 		if err != nil {
 			log.Println("Error fetching data:", err)
 			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
@@ -50,12 +51,12 @@ func ServerGo() {
 
 }
 
-func fetchDataViaSSH() (*Data, error) {
+func fetchDataViaSSH(cfg config.Config) (*Data, error) {
 	// Replace these with your server's details
-	host := "your-ssh-host"
-	port := "22"
-	username := "your-ssh-username"
-	password := "your-ssh-password"
+	host := cfg.SSH_HOST
+	port := cfg.SSH_PORT
+	username := cfg.SSH_USERNAME
+	password := cfg.SSH_PASS
 
 	// Connect to the SSH server
 	client, err := ssh.Dial("tcp", host+":"+port, &ssh.ClientConfig{

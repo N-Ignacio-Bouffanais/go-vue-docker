@@ -134,7 +134,6 @@ func handleTest(bot *tgbotapi.BotAPI, message *tgbotapi.Message, cfg config.Conf
 			return
 		}
 		PhotosResponse(screenshot, message, bot)
-		bot.Send(tgbotapi.NewMessage(message.Chat.ID, cfg.User))
 	} else {
 		bot.Send(tgbotapi.NewMessage(message.Chat.ID, "Comando no reconocido. Por favor, intenta nuevamente."))
 	}

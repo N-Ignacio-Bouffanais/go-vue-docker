@@ -11,7 +11,7 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 
-	go api.ServerGo()
+	go api.ServerGo(cfg)
 	// Start the chat bot in a separate Goroutine
 	go chatbot.StartBot(cfg)
 
