@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -36,6 +37,11 @@ type Post struct {
 
 func ServerGo(cfg config.Config) {
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173, http://localhost:8083", // Lista de orígenes permitidos
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",               // Métodos permitidos
+	}))
 
 	app.Get("/api/posts", func(c *fiber.Ctx) error {
 		posts, err := fetchPosts()

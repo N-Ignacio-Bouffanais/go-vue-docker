@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { useStore } from '../store'
 import Chart from 'chart.js/auto'
@@ -15,26 +15,26 @@ let chartInstance: Chart | null = null
 
 const store = useStore()
 
-// Simulación de la consulta a la API
+// Función de consulta para obtener datos desde la API
 const fetchData = async () => {
   const response = await fetch('http://127.0.0.1:8083/api/posts')
   return await response.json()
 }
 
 // Configuración de TanStack Query
-const query = useQuery({
+const { data } = useQuery({
   queryKey: ['chartData'],
   queryFn: fetchData,
   refetchInterval: 60000 // Refetch cada 1 minuto
 })
 
 // Observa los datos y actualiza el gráfico cuando cambian
-watch(query.data, (newData) => {
+watch(data, (newData) => {
   if (newData) {
     store.setChartData(newData)
     updateChart()
   }
-  console.log(query.data)
+  console.log(data)
 })
 
 const updateChart = () => {
@@ -77,6 +77,13 @@ const updateChart = () => {
 
 onMounted(() => {
   updateChart()
+})
+
+onBeforeUnmount(() => {
+  if (chartInstance) {
+    chartInstance.destroy()
+    chartInstance = null
+  }
 })
 </script>
 
