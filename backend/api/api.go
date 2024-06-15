@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"go-vue-docker/config"
 	"log"
 	"net/http"
@@ -26,8 +27,25 @@ func NewClient(baseURL string) *Client {
 	return &Client{baseURL: baseURL}
 }
 
+type Post struct {
+	UserID int    `json:"userId"`
+	ID     int    `json:"id"`
+	Title  string `json:"title"`
+	Body   string `json:"body"`
+}
+
 func ServerGo(cfg config.Config) {
 	app := fiber.New()
+
+	app.Get("/api/posts", func(c *fiber.Ctx) error {
+		posts, err := fetchPosts()
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Unable to fetch posts",
+			})
+		}
+		return c.JSON(posts)
+	})
 
 	app.Get("/api", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(fiber.Map{"msg": cfg.SSH_PORT})
@@ -97,4 +115,18 @@ func parseOutput(output string) []string {
 
 	// Return the parsed data
 	return lines
+}
+
+func fetchPosts() ([]Post, error) {
+	resp, err := http.Get("https://jsonplaceholder.typicode.com/posts")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var posts []Post
+	if err := json.NewDecoder(resp.Body).Decode(&posts); err != nil {
+		return nil, err
+	}
+	return posts, nil
 }

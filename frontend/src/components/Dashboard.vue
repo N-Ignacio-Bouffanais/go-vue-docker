@@ -17,7 +17,7 @@ const store = useStore()
 
 // Simulación de la consulta a la API
 const fetchData = async () => {
-  const response = await fetch('/api/data')
+  const response = await fetch('http://127.0.0.1:8083/api/posts')
   return await response.json()
 }
 
