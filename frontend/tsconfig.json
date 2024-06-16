@@ -1,35 +1,21 @@
-// {
-//   "files": [],
-//   "references": [
-//     {
-//       "path": "./tsconfig.node.json"
-//     },
-//     {
-//       "path": "./tsconfig.app.json"
-//     }
-//   ]
-// }
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "types": ["vinxi/types/client"],
+    "isolatedModules": true,
     "paths": {
-      "@/*": ["src/*"]
-    },
-    "types": ["vite/client"]
+      "~/*": ["./src/*"]
+    }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
