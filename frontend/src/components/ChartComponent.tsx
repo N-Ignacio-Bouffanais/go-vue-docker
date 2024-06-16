@@ -3,7 +3,13 @@ import { createSignal, onCleanup, onMount } from "solid-js";
 import { createQuery } from "@tanstack/solid-query";
 import Chart from "chart.js/auto";
 
-const fetchData = async () => {
+// Define the type for the data fetched from the API
+interface ChartData {
+  labels: string[];
+  values: number[];
+}
+
+const fetchData = async (): Promise<ChartData> => {
   const response = await fetch("https://api.example.com/data");
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -15,14 +21,17 @@ const ChartComponent = () => {
   let canvas: HTMLCanvasElement | undefined;
   const [chart, setChart] = createSignal<Chart | null>(null);
 
-  const query = createQuery(() => ["dataKey"], fetchData);
+  const query = createQuery<ChartData, Error>({
+    queryKey: ["dataKey"],
+    queryFn: fetchData,
+  });
 
   onMount(() => {
     if (query.data) {
       const newChart = new Chart(canvas!, {
-        type: "line", // O cualquier tipo de gráfico que desees
+        type: "line", // Or any other chart type you want
         data: {
-          labels: query.data.labels,
+          labels: query.data?.labels,
           datasets: [
             {
               label: "Dataset",
@@ -48,7 +57,7 @@ const ChartComponent = () => {
 
   return (
     <div>
-      {query.isLoading && <p>Cargando...</p>}
+      {query.isLoading && <p>Loading...</p>}
       {query.error && <p>Error: {query.error.message}</p>}
       {!query.isLoading && !query.error && <canvas ref={canvas}></canvas>}
     </div>
